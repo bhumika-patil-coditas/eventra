@@ -1,7 +1,6 @@
 package com.example.auth_service.util;
 
 import com.example.auth_service.entities.User;
-import com.example.auth_service.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,33 +16,25 @@ public class JwtUtil {
 
     private final long expirationTime;
     private final SecretKey key;
-    private final UserRepository userRepository;
 
 
     public JwtUtil(@Value("${jwt.secret}")String SECRET,
-                   UserRepository userRepository,
                    @Value("${jwt.expiration}")long expirationTime){
 
         this.key= Keys.hmacShaKeyFor(SECRET.getBytes());
-        this.userRepository = userRepository;
         this.expirationTime=expirationTime;
 
     }
 
-
-    public String generateToken(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
-        assert user != null;
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(email)
-                .claim("roles", user.getRole())
+                .subject(user.getEmail())
+                .claim("role", user.getRole())
                 .claim("username", user.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(key)
                 .compact();
-
-
     }
 
     public Claims parseToken(String token) {
@@ -58,7 +49,6 @@ public class JwtUtil {
         return parseToken(token).getSubject();
     }
 
-    // TODO change UserDetail object with employee
     public boolean validateToken(User userDetails, String username, String token) {
         return  username.equals(userDetails.getEmail()) && !isTokenExpired(token);
     }

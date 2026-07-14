@@ -1,5 +1,7 @@
 package com.example.auth_service.util;
 
+import com.example.auth_service.dtos.ApiResponse;
+import com.example.auth_service.dtos.ErrorResponse;
 import com.example.auth_service.entities.User;
 import com.example.auth_service.security.CustomUserDetailService;
 import io.jsonwebtoken.JwtException;
@@ -8,18 +10,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.ExceptionConstants;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
+import static com.example.auth_service.constants.Messages.UNAUTHORIZED;
 
 @Component
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }catch (JwtException e){
                 response.setStatus(401);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                ErrorResponse errorResponse=new ErrorResponse(ExceptionConstants.UNAUTHORIZED,401);
+                ErrorResponse errorResponse=new ErrorResponse(UNAUTHORIZED,401);
                 ApiResponse<ErrorResponse> applicationResponse=new ApiResponse<>(false,"",errorResponse, LocalDateTime.now());
 
                 response.getWriter().write(objectMapper.writeValueAsString(applicationResponse));
