@@ -1,0 +1,46 @@
+@use "../../styles/variables" as *;
+
+.subheading {
+    color: $primary;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 5rem;
+
+}
+.form{
+    position: absolute;
+    right: 3rem;
+    top: 10rem;
+    background-color: $textBtn;
+    padding: 1rem;
+}
+.btnSection{
+    display: flex;
+    gap: 1rem;
+}
+.close{
+    text-align: end;
+}
+
+.subcontainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.list{
+    padding: 0.25rem 0;
+}
+
+.topheading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}

@@ -1,0 +1,38 @@
+@use "../../styles/variables" as *;
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.heading {
+    color: $primary;
+    text-align: center;
+    margin: 0.5rem 0;
+}
+
+.statusSection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.subheading {
+    color: $primary;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.card {
+    padding: 1rem;
+    background-color: $textBtn;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
