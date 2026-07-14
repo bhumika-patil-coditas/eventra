@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
-from src.schema import GenerateOtpScema,SendOtpResponse, SesOtpMailRequest, VerifyOtpRequest
-from src.service.clients import Clients
+from fastapi import APIRouter, Depends, Body
+from src.schema import GenerateOtpScema,SendOtpResponse, SesOtpMailRequest, VerifyOtpRequest, TokenPayload
+from src.service import Clients, Auth
 from src.constants import ServiceEnum
 from src.dependencies import Microservice
+
 
 
 router = APIRouter(prefix ="/auth", tags=["auth"])
@@ -22,7 +23,6 @@ def generate_otp(data:GenerateOtpScema, service_dict:dict[ServiceEnum, Clients] 
 def verify_otp(data:VerifyOtpRequest,  service_dict:dict[ServiceEnum, Clients] = Depends(Microservice.get_service([ServiceEnum.AUTH]))):
     return service_dict[ServiceEnum.AUTH].call(request="verify-otp", payload=data.model_dump())
 
-
-
-
-
+@router.get("/me")
+def get_me(user:TokenPayload = Depends(Auth.RBAC(allowed_roles=[]))):
+    return user

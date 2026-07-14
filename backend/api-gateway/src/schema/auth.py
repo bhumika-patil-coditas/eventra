@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from src.constants import RolesEnum
 
 class GenerateOtpScema(BaseModel):
     email:str
@@ -15,3 +16,8 @@ class SesOtpMailRequest(BaseModel):
 class VerifyOtpRequest(BaseModel):
     code :str
     email: EmailStr
+
+class TokenPayload(BaseModel):
+    sub: str
+    role: RolesEnum
+    username: str
