@@ -1,6 +1,4 @@
 backend/.env
 *.pyc
-*.pyc
-
 *.env
 *.log

@@ -1,0 +1,1 @@
+from .ses_schema import OtpMailRequest, VerifyMailRequest
