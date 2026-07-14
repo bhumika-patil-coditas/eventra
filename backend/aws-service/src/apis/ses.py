@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Body
 from src.dependencies import deps
 from src.service import SesService
-from src.schema import OtpMailRequest
+from src.schema import OtpMailRequest, VerifyMailRequest
 
 
 router = APIRouter(prefix="/ses", tags=["ses"])
@@ -18,3 +18,7 @@ def send_otp_mail(data:OtpMailRequest , ses_service:SesService = Depends(deps.ge
 
     )
     return ses_service.send_text_mail(to_address=[data.reciver_mail] , subject=sub, body_text=body)
+
+@router.post("/verify-mail")
+def verify_mail(data:VerifyMailRequest, ses_service:SesService = Depends(deps.get_ses_service)):
+    return ses_service.validate_email_address(email=data.email)
