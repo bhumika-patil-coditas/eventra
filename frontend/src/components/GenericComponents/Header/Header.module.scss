@@ -1,6 +1,5 @@
 .header{
     padding: 1rem;
-    position: fixed;
-    left: 15rem;
-    top: 0;
+    display: flex;
+    justify-content: end;
 }

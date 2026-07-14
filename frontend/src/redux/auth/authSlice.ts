@@ -4,7 +4,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    role: "ORGANISER" | "VENDOR" | "ADMIN";
+    role: "ORGANIZER" | "VENDOR" | "ADMIN";
 }
 
 interface AuthState {

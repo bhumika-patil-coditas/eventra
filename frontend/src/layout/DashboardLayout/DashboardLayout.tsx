@@ -15,7 +15,6 @@ const DashboardLayout = () => {
                 <main className={styles.content}>
                     <Outlet />
                 </main>
-                {/* <Footer children="Child" /> */}
             </div>
 
         </div>

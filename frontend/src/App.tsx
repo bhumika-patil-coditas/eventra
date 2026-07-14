@@ -1,11 +1,10 @@
-import DashboardLayout from "./layout/DashboardLayout/DashboardLayout"
+import { RouterProvider } from "react-router-dom"
+import { router } from "./router/router"
 
 function App() {
 
   return (
-    <>
-      <DashboardLayout />
-    </>
+    <RouterProvider router={router} />
   )
 }
 

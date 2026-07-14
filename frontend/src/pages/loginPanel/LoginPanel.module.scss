@@ -1,0 +1,41 @@
+@use "../../styles/mixins" as *;
+@use "../../styles/variables" as *;
+
+.loginPanel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    min-height: 100vh;
+}
+
+.leftSidePanel {
+    background-color: $dark-themed;
+    @include flex-center;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: $textBtn;
+}
+
+.formPanel {
+    @include flex-center;
+    flex-direction: column;
+    gap: 2rem
+}
+
+.headingSection {
+    @include flex-center;
+    flex-direction: column;
+}
+
+.logo {
+    width: 4rem;
+}
+
+.subHeading {
+    color: $primary;
+    margin-top: 1rem;
+    text-align: center
+}
+
+.formDiv {
+    width: 20rem
+}

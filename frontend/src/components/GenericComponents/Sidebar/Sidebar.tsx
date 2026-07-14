@@ -8,14 +8,20 @@ const Sidebar = () => {
 
     return (
         <div className={styles.sidebar}>
-            {/* {menus.map(menu =>
-                <NavLink
-                    to={menu.path}
-                    className={({ isActive }) => isActive ? styles["active"] : ""}
-                >
-                    {menu.label}
-                </NavLink>
-            )} */}
+            <div className={styles.sidebarHeader}>
+                <img className={styles.logo} src="/favicon.svg" alt="logo" />
+                <h2>Eventra</h2>
+            </div>
+            <div className={styles.contents}>
+                {menus.map(menu =>
+                    <NavLink
+                        to={menu.path}
+                        className={({ isActive }) => isActive ? styles["active"] : styles.content}
+                    >
+                        {menu.label}
+                    </NavLink>
+                )}
+            </div>
         </div>
     )
 }

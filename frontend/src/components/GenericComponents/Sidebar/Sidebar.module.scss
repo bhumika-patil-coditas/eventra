@@ -1,7 +1,42 @@
 @use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
 
 .sidebar {
-    border-right: thin solid $primary;
     min-height: 100vh;
     width: 15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sidebarHeader {
+    @include flex-center;
+    gap: 0.5rem;
+    color: $primary;
+}
+
+.logo {
+    margin-top: 1rem, ;
+    width: 3rem
+}
+
+.contents {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    padding: 0.75rem;
+    text-decoration: none
+}
+
+.content:hover {
+    background-color: $light-themed;
+    color: $primary;
+}
+
+.active {
+    @extend .content;
+    background-color: $primary;
+    color: $textBtn;
 }

@@ -4,7 +4,7 @@ export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (data) => ({
-                url: "auth/login",
+                url: "auth/verify-otp",
                 method: "POST",
                 body: data
             })
@@ -12,7 +12,7 @@ export const authApi = baseApi.injectEndpoints({
 
         requestOTP: builder.mutation({
             query: (data) => ({
-                url: "auth/request",
+                url: "auth/generate-otp",
                 method: "POST",
                 body: data
             })
