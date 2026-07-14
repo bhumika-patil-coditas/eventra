@@ -1,0 +1,16 @@
+{
+    "auth":{
+        "base_url" : "https://popper-unafraid-freebie.ngrok-free.dev/api/v1",
+        "endpoints":{
+            "generate-otp" : "POST /auth/request-otp",
+            "verify-otp" : "POST /auth/verify-otp"
+        }
+    },
+    "aws": {
+        "base_url" : "https://k0p9tj6q-8001.inc1.devtunnels.ms",
+        "endpoints" : {
+            "send_otp" : "POST /ses/send-otp",
+            "verify-mail" : "POST /ses/verify-mail"
+        }
+    }
+}
