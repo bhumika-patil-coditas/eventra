@@ -3,7 +3,7 @@ import { SidebarConfig } from "../../../config/Sidebar.config";
 import styles from "./Sidebar.module.scss";
 
 const Sidebar = () => {
-    const role = "ADMIN";
+    const role = "ORGANIZER";
     const menus = SidebarConfig[role];
 
     return (
