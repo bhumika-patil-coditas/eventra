@@ -12,5 +12,16 @@ export const SidebarConfig = {
             label: "Proposals",
             path: "/admin/proposals"
         }
-    ]
+    ],
+
+    ORGANIZER: [
+        {
+            label: "Events",
+            path: "/organizer/events"
+        },
+        {
+            label: "Proposals",
+            path: "/organizer/proposals"
+        }
+    ],
 }

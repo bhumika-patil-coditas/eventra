@@ -11,15 +11,40 @@ const AdminPanel = () => {
     return (
         <div className={styles.mainPanel}>
 
-            <div className={styles.actions}>
-                <h2>Quick Actions</h2>
-                <Button className="primary" children="Add Event" onClick={() => setIsAddEventPanelOpen(true)} />
-                <Button className="primary" children="Add User" onClick={() => setIsAddUserPanelOpen(true)} />
+            <h2 className={styles.heading}>Welcome Admin!</h2>
+            <div className={styles.countGrid}>
+                <div className={styles.card}>
+                    <h3>Total Vendors</h3>
+                    <h1>30</h1>
+                </div>
+                <div className={styles.card}>
+                    <h3>Total Organizers</h3>
+                    <h1>50</h1>
+                </div>
+                <div className={styles.card}>
+                    <h3>Total Events</h3>
+                    <h1>20</h1>
+                </div>
+                <div className={styles.card}>
+                    <h3>Total Reviewers</h3>
+                    <h1>4</h1>
+                </div>
             </div>
 
-            <div>
-                Admin
+            <div className={styles.subcontainer}>
+                <div className={styles.actions}>
+                    <h3>Quick Actions</h3>
+                    <Button className="primary" children="Add Event" onClick={() => setIsAddEventPanelOpen(true)} />
+                    <Button className="primary" children="Add User" onClick={() => setIsAddUserPanelOpen(true)} />
+                </div>
+
+                <div>
+                  
+                </div>
             </div>
+
+
+
 
             {isAddEventPanelOpen && <AddEventForm onClose={() => setIsAddEventPanelOpen(false)} />}
             {isAddUserPanelOpen && <AddUserForm onClose={() => setIsAddUserPanelOpen(false)} />}

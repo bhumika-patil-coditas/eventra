@@ -36,6 +36,14 @@ export const router = createBrowserRouter([
                     {
                         path: "/events/1234",
                         Component: ViewDetails
+                    },
+                    {
+                        path: "/organizer/events",
+                        Component: Events
+                    },
+                    {
+                        path: "/vendor/events",
+                        Component: Events
                     }
                 ]
             }

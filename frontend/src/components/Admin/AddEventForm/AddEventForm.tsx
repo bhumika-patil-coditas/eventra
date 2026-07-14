@@ -17,7 +17,7 @@ const AddEventForm = ({ onClose }: AddEventFormProps) => {
             budget_upper: 0,
             budget_lower: 0,
             status: "",
-            file: ""
+            file: []
         },
     });
 
@@ -116,7 +116,6 @@ const AddEventForm = ({ onClose }: AddEventFormProps) => {
                             />
                         )}
                     />
-
 
                     <Button type="submit" className="primary" children="Add Event" />
                 </Form>
