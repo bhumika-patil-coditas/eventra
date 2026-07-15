@@ -1,47 +1,63 @@
-import pem
-from src.core import SETTINGS, CustomException
 import jwt
-from src.constants import RolesEnum
+import pem
 from fastapi import Header
+from src.constants import RolesEnum
+from src.core import SETTINGS, CustomException
 from src.schema import TokenPayload
 
+
 class Auth:
-    
-    @classmethod
-    def verify_token(cls, token:str) -> TokenPayload:
-        try:
-            private_key = pem.parse_file(SETTINGS.PUBLIC_KEY_FILEPATH)
-            secret_key_pem = bytes(str(private_key[0]), 'utf-8')
-
-            data = jwt.decode(jwt=token, key=secret_key_pem, algorithms=["HS512"])
-
-            return TokenPayload.model_validate(data)
-        except Exception:
-            raise
+    _public_key = None
 
     @classmethod
-    def verify_hs_token(cls, token:str) -> TokenPayload:
-        try:
+    def _get_public_key(cls):
+        if cls._public_key is None:
+            key = pem.parse_file(SETTINGS.PUBLIC_KEY_FILEPATH)
+            cls._public_key = str(key[0]).encode()
 
-            return jwt.decode(jwt=token, key=SETTINGS.PRIVATE_KEY_FOR_HS, algorithms=["HS384"])
-        except Exception:
-            raise 
-    
+        return cls._public_key
+
     @classmethod
-    def RBAC(cls, allowed_roles:list[RolesEnum] = []):
-        
-        def check_rbac(Authorization:str = Header(...)):
+    def verify_token(cls, token: str) -> TokenPayload:
+        payload = jwt.decode(
+            jwt=token,
+            key=cls._get_public_key(),
+            algorithms=["HS512"],
+        )
+        return TokenPayload.model_validate(payload)
 
-            token:str = Authorization.split(" ")[-1]
-            payload:TokenPayload = cls.verify_hs_token(token = token)
+    @classmethod
+    def verify_hs_token(cls, token: str) -> TokenPayload:
+        payload = jwt.decode(
+            jwt=token,
+            key=SETTINGS.PRIVATE_KEY_FOR_HS,
+            algorithms=["HS384"],
+        )
+        return TokenPayload.model_validate(payload)
 
-            #only authentation.
-            if allowed_roles is None or allowed_roles == []:
+    @classmethod
+    def RBAC(cls, allowed_roles: list[RolesEnum] | None = None):
+
+        def check_rbac(Authorization: str = Header(...)):
+            try:
+                scheme, token = Authorization.split(" ", 1)
+            except ValueError:
+                raise CustomException.UnauthorizedError(
+                    message="Invalid Authorization header."
+                )
+
+            if scheme.lower() != "bearer":
+                raise CustomException.UnauthorizedError(
+                    message="Invalid authentication scheme."
+                )
+
+            payload = cls.verify_hs_token(token)
+
+            if not allowed_roles or payload.role in allowed_roles:
                 return payload
 
-            elif payload.role in allowed_roles:
-                return payload
-            else:
-                raise CustomException.ForbiddenError(message="You are not allowed to access this service.")
+            raise CustomException.ForbiddenError(
+                message="You are not allowed to access this service."
+            )
 
         return check_rbac
