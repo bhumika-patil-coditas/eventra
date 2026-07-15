@@ -10,7 +10,9 @@
         "base_url" : "https://k0p9tj6q-8001.inc1.devtunnels.ms",
         "endpoints" : {
             "send_otp" : "POST /ses/send-otp",
-            "verify-mail" : "POST /ses/verify-mail"
+            "verify-mail" : "POST /ses/verify-mail",
+            "get-upload-presigned-url" : "POST /s3/get-presigened-url",
+            "get-object": "POST /s3/get-object"
         }
     }
 }

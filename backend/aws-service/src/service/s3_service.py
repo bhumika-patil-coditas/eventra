@@ -5,6 +5,7 @@ from fastapi import UploadFile
 from uuid import uuid4
 from pathlib import Path
 import os
+from src.schema import UplaodPresignedUrlResponse
 
 class S3service:
 
@@ -40,7 +41,7 @@ class S3service:
                 Params={'Bucket': SETTINGS.S3_BUCKET_NAME, 'Key': aws_key},
                 ExpiresIn=exp,
             )
-            return response
+            return UplaodPresignedUrlResponse(uploadUrl=response)
         except ClientError as e:
             LOGGER.error(e)
             raise CustomException.InternalError(message="Error connecting to s3.")

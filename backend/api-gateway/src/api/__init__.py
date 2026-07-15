@@ -1,4 +1,4 @@
 from .auth import router as auth_router
-from .dev import router as dev_router
+from .aws import router as aws_router
 
-__all__ = [auth_router, dev_router]
+__all__ = [auth_router, aws_router]

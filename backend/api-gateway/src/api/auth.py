@@ -1,28 +1,64 @@
-from fastapi import APIRouter, Depends, Body
-from src.schema import GenerateOtpScema,SendOtpResponse, SesOtpMailRequest, VerifyOtpRequest, TokenPayload
-from src.service import Clients, Auth
+from fastapi import APIRouter, Depends
+
 from src.constants import ServiceEnum
 from src.dependencies import Microservice
+from src.schema import (
+    GenerateOtpScema,
+    SendOtpResponse,
+    SesOtpMailRequest,
+    VerifyOtpRequest,
+    TokenPayload,
+)
+from src.service import Auth, Clients
 
 
+router = APIRouter(prefix="/auth", tags=["auth"])
 
-router = APIRouter(prefix ="/auth", tags=["auth"])
 
 @router.post("/generate-otp")
-def generate_otp(data:GenerateOtpScema, service_dict:dict[ServiceEnum, Clients] = Depends(Microservice.get_service([ServiceEnum.AUTH, ServiceEnum.AWS]))):
+def generate_otp(
+    data: GenerateOtpScema,
+    services: dict[ServiceEnum, Clients] = Depends(
+        Microservice.get_service([ServiceEnum.AUTH, ServiceEnum.AWS])
+    ),
+):
+    auth_client = services[ServiceEnum.AUTH]
+    aws_client = services[ServiceEnum.AWS]
 
-    otp_response = service_dict[ServiceEnum.AUTH].call(request="generate-otp", payload=data.model_dump())
-    otp_response_model = SendOtpResponse.model_validate(otp_response)
+    otp = SendOtpResponse.model_validate(
+        auth_client.call(
+            request="generate-otp",
+            payload=data.model_dump(),
+        )
+    )
 
-    ses_payload = SesOtpMailRequest(otp=otp_response_model.otp , reciver_mail= data.email , expire_in_min=otp_response_model.expiration_in_milliSeconds//(1000*60))
-    response = service_dict[ServiceEnum.AWS].call(request="send_otp", payload = ses_payload.model_dump())
+    aws_client.call(
+        request="send_otp",
+        payload=SesOtpMailRequest(
+            otp=otp.otp,
+            reciver_mail=data.email,
+            expire_in_min=otp.expiration_in_milliSeconds // (1000 * 60),
+        ).model_dump(),
+    )
 
-    return "Otp send sucessfully."
+    return {"message": "OTP sent successfully."}
+
 
 @router.post("/verify-otp")
-def verify_otp(data:VerifyOtpRequest,  service_dict:dict[ServiceEnum, Clients] = Depends(Microservice.get_service([ServiceEnum.AUTH]))):
-    return service_dict[ServiceEnum.AUTH].call(request="verify-otp", payload=data.model_dump())
+def verify_otp(
+    data: VerifyOtpRequest,
+    services: dict[ServiceEnum, Clients] = Depends(
+        Microservice.get_service([ServiceEnum.AUTH])
+    ),
+):
+    return services[ServiceEnum.AUTH].call(
+        request="verify-otp",
+        payload=data.model_dump(),
+    )
+
 
 @router.get("/me")
-def get_me(user:TokenPayload = Depends(Auth.RBAC(allowed_roles=[]))):
+def get_me(
+    user: TokenPayload = Depends(Auth.RBAC()),
+):
     return user
