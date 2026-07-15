@@ -4,9 +4,12 @@ import Form from "../../GenericComponents/Form/Form";
 import Modal from "../../GenericComponents/Modal/Modal";
 import FormInput from "../../GenericComponents/FormInput/FormInput";
 import type { AddEventFormProps } from "./AddEventForm.types";
-import { useState } from "react";
+import { useGetPresinedMutation } from "../../../redux/services/organizer.services";
 
 const AddEventForm = ({ onClose }: AddEventFormProps) => {
+
+    const organiserid = "12345678";
+    const [getPresined] = useGetPresinedMutation()
 
     const { handleSubmit, control, formState: { errors } } = useForm({
         defaultValues: {
@@ -17,12 +20,39 @@ const AddEventForm = ({ onClose }: AddEventFormProps) => {
             budget_upper: 0,
             budget_lower: 0,
             status: "",
-            file: []
+            files: []
         },
     });
 
-    const onSubmit = () => {
+    const onSubmit = async (data: any) => {
+        try {
 
+            let uploadUrls: string[] = [];
+
+            for (const file of data.files) {
+                const key = organiserid + Math.floor(Math.random() * (9999 - 1000) + 1000) + file.name
+                const res = await getPresined(key).unwrap();
+                
+                await fetch(res.uploadUrl,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type":"application/octet-stream"
+                        },
+                        body: file,
+                    }
+                )
+                uploadUrls.push(key)
+            }
+
+            const payload = {
+                ...data, files: uploadUrls
+            }
+            // const res = await sampleApi(payload).unwrap();
+
+        } catch (error) {
+           console.log(error)
+        }
     }
 
     return (
@@ -114,6 +144,22 @@ const AddEventForm = ({ onClose }: AddEventFormProps) => {
                                 type="text"
                                 placeholder="Choose event status"
                             />
+                        )}
+                    />
+
+                    <Controller
+                        control={control}
+                        name="files"
+                        render={({ field }) => (
+                            <FormInput
+                                type="file"
+                                onChange={(e) => field.onChange([
+                                    ...(field.value ?? []),
+                                    ...Array.from(e.target.files ?? [])
+                                ])}
+                                multiple
+                            />
+
                         )}
                     />
 
