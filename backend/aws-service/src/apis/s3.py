@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from src.dependencies import deps
 from src.service import S3service
-import uuid
+from src.schema import GetPresignedUrl
 from typing import Optional
 
 router = APIRouter(prefix="/s3", tags=["S3"])
@@ -12,8 +12,6 @@ def get_s3_object(aws_key:str, exp_in_sec:Optional[int]=None, s3_service:S3servi
         return s3_service.generate_get_presigned_url(aws_key=aws_key, exp=exp_in_sec)
     return s3_service.generate_get_presigned_url(aws_key=aws_key)
 
-@router.post("/vendor-galary/get-presigened-url")
-def get_presigned_for_vendor_photo(vendor_id:uuid.UUID, file_name:str, s3_service:S3service = Depends(deps.get_s3_service)):
-    key = f"{vendor_id}/{uuid.uuid4().hex}-{file_name}"
-    return s3_service.generate_upload_presigned_url(aws_key=key)
-
+@router.post("/get-presigened-url")
+def get_presigned_url(data:GetPresignedUrl, s3_service:S3service = Depends(deps.get_s3_service)):
+    return s3_service.generate_upload_presigned_url(aws_key=data.key)
