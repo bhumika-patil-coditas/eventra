@@ -1,14 +1,21 @@
-from fastapi import FastAPI, WebSocket, Depends
-import uvicorn
-from src.api import __all__
+from fastapi import Depends, FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from src.service import PUBSUB, Auth
+import uvicorn
+
+from src.api import __all__ as routers
 from src.schema import TokenPayload
+from src.service import Auth, PUBSUB
 
-app = FastAPI(title="Main gateway")
 
-@app.get("/ping")
-def health():
+app = FastAPI(
+    title="Main Gateway",
+    summary="API Gateway for routing requests to internal microservices.",
+)
+
+
+@app.get("/ping", summary="Health check")
+def health() -> str:
+    """Simple health check endpoint."""
     return "pong"
 
 
@@ -20,24 +27,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for router in __all__:
+
+for router in routers:
     app.include_router(router)
 
+
 @app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket, user:TokenPayload = Depends(Auth.RBAC(allowed_roles=[]))):
+async def websocket_endpoint(
+    websocket: WebSocket,
+    user: TokenPayload = Depends(Auth.RBAC()),
+) -> None:
+    """
+    Establish a websocket connection and subscribe the user
+    to their role channel and personal channel.
+    """
     await PUBSUB.subscribe(
-        websocket,
-        [
+        websocket=websocket,
+        channels=[
             user.role.value,
-            f"user:{user.sub}"
+            f"user:{user.sub}",
         ],
     )
 
     try:
         while True:
+            # Keeps the websocket alive.
             await websocket.receive_text()
     finally:
         await PUBSUB.unsubscribe(websocket)
 
+
 if __name__ == "__main__":
-    uvicorn.run("main:app" , port=8000, reload=True)
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+    )
