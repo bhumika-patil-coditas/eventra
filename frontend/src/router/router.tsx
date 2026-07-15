@@ -7,6 +7,7 @@ import ProtectedGuard from "../guards/ProtectedGuard";
 import { createBrowserRouter } from "react-router-dom";
 import Events from "../components/Events/Events";
 import ViewDetails from "../components/ViewDetails/ViewDetails";
+import Users from "../components/Admin/Users/Users";
 
 export const router = createBrowserRouter([
     {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
                     {
                         path: "/admin/events",
                         Component: Events
+                    },
+                    {
+                        path: "/admin/users",
+                        Component: Users
                     },
                     {
                         path: "/events/1234",

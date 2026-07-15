@@ -9,6 +9,10 @@ export const SidebarConfig = {
             path: "/admin/events"
         },
         {
+            label: "Users",
+            path: "/admin/users"
+        },
+        {
             label: "Proposals",
             path: "/admin/proposals"
         }

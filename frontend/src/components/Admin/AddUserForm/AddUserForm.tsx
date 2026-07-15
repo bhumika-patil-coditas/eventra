@@ -4,11 +4,13 @@ import Form from "../../GenericComponents/Form/Form";
 import Modal from "../../GenericComponents/Modal/Modal";
 import FormInput from "../../GenericComponents/FormInput/FormInput";
 import type { AddUserFormProps } from "./AddUserForm.types";
-import { useAddUserMutation } from "../../../redux/services/admin.services";
+import { useAddUserMutation, useEditUserMutation } from "../../../redux/services/admin.services";
 
-const AddUserForm = ({ onClose }: AddUserFormProps) => {
+const AddUserForm = ({ onClose, id }: AddUserFormProps) => {
 
     const [addUser] = useAddUserMutation();
+    const [editUser] = useEditUserMutation();
+
     const { handleSubmit, control } = useForm({
         defaultValues: {
             name: "",
@@ -24,12 +26,12 @@ const AddUserForm = ({ onClose }: AddUserFormProps) => {
     }
 
     const onSubmit = async (data: Role) => {
-        try {
-            const res = await addUser(data).unwrap();
-            console.log(res);
-        } catch (error) {
-            console.log(error)
+        if (id) {editUser
+
+        } else {
+            
         }
+
     }
 
     return (

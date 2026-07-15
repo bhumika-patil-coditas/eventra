@@ -21,6 +21,13 @@
     color: $textBtn
 }
 
+.tertiary {
+    @extend .btn;
+    padding: 0.25rem 0.5rem;
+    background-color: $tertiary;
+    color: $textBtn
+}
+
 .danger {
     @extend .btn;
     padding: 0.25rem 0.5rem;

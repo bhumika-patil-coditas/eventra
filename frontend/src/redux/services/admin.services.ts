@@ -24,7 +24,22 @@ export const authApi = baseApi.injectEndpoints({
                 body: data
             })
         }),
+
+        editUser: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `api/v1/user/edit/${id}`,
+                method: "PUT",
+                body: data
+            })
+        }),
+
+        deleteUser: builder.mutation({
+            query: (id) => ({
+                url: `api/v1/user/delete/${id}`,
+                method: "DELETE",
+            })
+        }),
     })
 })
 
-export const { useAddEventMutation, useAddUserMutation, useGetUserQuery } = authApi;
+export const { useAddEventMutation, useAddUserMutation, useGetUserQuery, useDeleteUserMutation , useEditUserMutation} = authApi;
