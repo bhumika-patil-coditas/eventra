@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-.private_key.pem
+private_key.pem
 
 ### STS ###
 .apt_generated

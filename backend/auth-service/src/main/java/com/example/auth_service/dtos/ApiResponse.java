@@ -1,7 +1,6 @@
 package com.example.auth_service.dtos;
 
 import lombok.Data;
-import org.springframework.web.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
