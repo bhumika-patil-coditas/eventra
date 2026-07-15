@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Body
 from src.schema import GenerateOtpScema,SendOtpResponse, SesOtpMailRequest, VerifyOtpRequest, TokenPayload
-from src.service import Clients, Auth
+from src.service import Clients, Auth, PUBSUB
 from src.constants import ServiceEnum
 from src.dependencies import Microservice
 

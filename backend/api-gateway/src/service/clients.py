@@ -12,12 +12,14 @@ class Clients:
 
 
     def call(self, request, payload:dict):
+
         if request in self.endpoints:
             method, endpoint = self.endpoints[request].split(" ", 1)
-
+            # print(method, endpoint)
             if method == "GET":
                 response =requests.get(url=f"{self.base_url}{endpoint}", params=payload)
             elif method == "POST":
+                # print(method, endpoint)
                 response = requests.post(url=f"{self.base_url}{endpoint}", json=payload)
             elif method == "PATCH":
                 response = requests.patch(url=f"{self.base_url}{endpoint}", json=payload)
@@ -26,8 +28,10 @@ class Clients:
             else:
                 raise HTTPException(status_code=500)
             if response.status_code != 200:
+                # print(response, response.content)
                 raise HTTPException(status_code=response.status_code, detail=json.loads(response.content))
             elif response.status_code == 200:
+                # print(response, response.content)
                 return json.loads(response.content)
             else:
                 raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)  

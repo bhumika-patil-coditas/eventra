@@ -5,6 +5,9 @@ class Config(BaseSettings):
     LOG_FILE:str
 
     PUBLIC_KEY_FILEPATH:str
+    PRIVATE_KEY_FOR_HS: str
+
+    REDIS_URL: str
 
     model_config = SettingsConfigDict(
         env_file=".env"

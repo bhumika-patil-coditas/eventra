@@ -5,7 +5,6 @@ from src.constants import RolesEnum
 from fastapi import Header
 from src.schema import TokenPayload
 
-
 class Auth:
     
     @classmethod
@@ -19,15 +18,22 @@ class Auth:
             return TokenPayload.model_validate(data)
         except Exception:
             raise
-    
 
+    @classmethod
+    def verify_hs_token(cls, token:str) -> TokenPayload:
+        try:
+
+            return jwt.decode(jwt=token, key=SETTINGS.PRIVATE_KEY_FOR_HS, algorithms=["HS384"])
+        except Exception:
+            raise 
+    
     @classmethod
     def RBAC(cls, allowed_roles:list[RolesEnum] = []):
         
         def check_rbac(Authorization:str = Header(...)):
 
             token:str = Authorization.split(" ")[-1]
-            payload:TokenPayload = cls.verify_token(token = token)
+            payload:TokenPayload = cls.verify_hs_token(token = token)
 
             #only authentation.
             if allowed_roles is None or allowed_roles == []:
