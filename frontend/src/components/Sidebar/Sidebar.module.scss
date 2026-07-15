@@ -1,0 +1,7 @@
+@use "../../styles/variables" as *;
+
+.sidebar {
+    border-right: thin solid $primary;
+    min-height: 100vh;
+    width: 15rem;
+}
